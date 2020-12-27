@@ -273,7 +273,7 @@ export class GeneratePropertyForHtmlElement implements vscode.CodeActionProvider
 
 	provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
 		let missingPropDiagnostics = context.diagnostics
-			.filter(diagnostic => diagnostic.code === 2339);
+			.filter(diagnostic => ["2339", "2551"].find(code => String(diagnostic.code) === code) !== null);
 		if (missingPropDiagnostics.length > 0) {
 			let querySelector = getQuerySelector(document.lineAt(range.start.line).text);
 			if (querySelector) {
