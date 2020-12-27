@@ -6,9 +6,8 @@
 		"html-import"
 	],
 	"icon": "images/icon.png",
-	"preview": true,
 	"description": "Completes css-selectors js/ts when typing .querySelector in using html files imported (using es6-imports)",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"license": "MIT",
 	"publisher": "tuwrraphael",
 	"author": {

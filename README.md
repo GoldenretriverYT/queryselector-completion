@@ -9,7 +9,7 @@ This extension provides autocompletion for selectors and a code action to define
 
 If a html document is imported via ES6 imports, typing `querySelector` in js/ts documents triggers autocompletion of possible css selectors.
 
-![querySelector completion items](images/completion.gif)
+![querySelector completion items](https://raw.githubusercontent.com/tuwrraphael/queryselector-completion/main/images/completion.gif)
 
 Import the document for example as:
 ~~~js
@@ -24,7 +24,7 @@ Currently supported completion suggestions:
 
 When generating a missing class property, for a querySelector, the type of the property is generated as `any`. This extension infers the type correctly using the css selector and the imported html template.
 
-![class property type inference](images/generateprop.gif)
+![class property type inference](https://raw.githubusercontent.com/tuwrraphael/queryselector-completion/main/images/generateprop.gif)
 
 As above the document needs to be imported:
 ~~~js
