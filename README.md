@@ -1,22 +1,41 @@
-# queryselector-completion README
+# queryselector completion vscode extension
 
-This is the README for your extension "queryselector-completion". After writing up a brief description, we recommend including the following sections.
+When developing web applications with vanilla js and web components, it is often required to select elements from a imported template with `querySelector`.
+This extension provides autocompletion for selectors and a code action to define corresponding class properties.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### `querySelector` completions in javascript/typescript
 
-For example if there is an image subfolder under your extension project workspace:
+If a html document is imported via ES6 imports, typing `querySelector` in js/ts documents triggers autocompletion of possible css selectors.
 
-\!\[feature X\]\(images/feature-x.png\)
+![querySelector completion items](images/completion.gif)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Import the document for example as:
+~~~js
+import * as template from "./template.html";
+~~~
 
-## Requirements
+Currently supported completion suggestions:
+* id attributes
+* data-* attributes
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### Infer type from html when generating class properties for html elements (typescript)
 
-## Extension Settings
+When generating a missing class property, for a querySelector, the type of the property is generated as `any`. This extension infers the type correctly using the css selector and the imported html template.
+
+![class property type inference](images/generateprop.gif)
+
+As above the document needs to be imported:
+~~~js
+import template from "./template.html";
+~~~
+
+<!-- ## Requirements
+
+If you have any requirements or dependencies, add a section describing those and how to install and configure them. -->
+
+<!-- ## Extension Settings
 
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
@@ -25,13 +44,13 @@ For example:
 This extension contributes the following settings:
 
 * `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `myExtension.thing`: set to `blah` to do something -->
 
-## Known Issues
+<!-- ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Calling out known issues can help limit users opening duplicate issues against your extension. -->
 
-## Release Notes
+<!-- ## Release Notes
 
 Users appreciate release notes as you update your extension.
 
@@ -45,21 +64,4 @@ Fixed issue #.
 
 ### 1.1.0
 
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Added features X, Y, and Z. -->

@@ -1,8 +1,19 @@
 {
 	"name": "queryselector-completion",
-	"displayName": "queryselector-completion",
-	"description": "Completes css-selectors when typing .querySelector in js/ts using html files imported (using es6-imports)",
+	"displayName": "queryselector completion",
+	"keywords": [
+		"querySelector",
+		"html-import"
+	],
+	"icon": "images/icon.png",
+	"preview": true,
+	"description": "Completes css-selectors js/ts when typing .querySelector in using html files imported (using es6-imports)",
 	"version": "0.0.1",
+	"license": "MIT",
+	"publisher": "tuwrraphael",
+	"author": {
+		"name": "tuwrraphael"
+	},
 	"engines": {
 		"vscode": "^1.52.0"
 	},
@@ -45,5 +56,10 @@
 		"@typescript-eslint/types": "^4.11.0",
 		"@typescript-eslint/typescript-estree": "^4.11.0",
 		"node-html-parser": "^2.0.0"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tuwrraphael/queryselector-completion"
+	},
+	"homepage": "https://github.com/tuwrraphael/queryselector-completion"
 }
