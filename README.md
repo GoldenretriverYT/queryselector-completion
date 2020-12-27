@@ -1,7 +1,7 @@
 [![](https://vsmarketplacebadge.apphb.com/version-short/tuwrraphael.queryselector-completion.svg)](https://marketplace.visualstudio.com/items?itemName=tuwrraphael.queryselector-completion)
 # queryselector completion vscode extension
 
-When developing web applications with vanilla js and web components, it is often required to select elements from a imported template with `querySelector`.
+When developing web applications with vanilla js and web components, it is often required to select elements from an imported template with `querySelector`.
 This extension provides autocompletion for selectors and a code action to define corresponding class properties.
 
 ## Features
