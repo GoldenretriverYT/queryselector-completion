@@ -1,4 +1,4 @@
-[![](https://vsmarketplacebadge.apphb.com/version-short/tuwrraphael.queryselector-completion.svg)](https://marketplace.visualstudio.com/items?itemName=tuwrraphael.queryselector-completion)
+
 # queryselector completion vscode extension
 
 When developing web applications with vanilla js and web components, it is often required to select elements from an imported template with `querySelector`.

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import * as htmlParser from "node-html-parser";
-import * as tsParser from "@typescript-eslint/typescript-estree";
-import { ClassDeclaration, LineAndColumnData, } from "@typescript-eslint/types/dist/ts-estree";
+import * as htmlParser from "node-html-parser/dist/";
+import * as tsParser from "@typescript-eslint/typescript-estree/dist/";
+import { ClassDeclaration, LineAndColumnData } from "@typescript-eslint/types/dist/ts-estree";
 import { AST_NODE_TYPES } from "@typescript-eslint/types/dist/ast-node-types";
 import { AST_TOKEN_TYPES } from "@typescript-eslint/types/dist/ast-token-types";
 import * as path from "path";
@@ -15,14 +15,16 @@ function isWithin(pos: vscode.Position, start: LineAndColumnData, end: LineAndCo
 }
 
 function getHtmlImportFile(code: string) {
-	let htmlImportRegex = /import.+?from.+("|')(.+\.html)('|")/.exec(code);
-	if (null !== htmlImportRegex) {
-		return htmlImportRegex[2];
-	}
-	else {
-		return null;
-	}
+    // Updated regex to match ///<htmlref="src"/>
+    let htmlRefRegex = /\/\/\/<htmlref="(.+?)"(.+?)?\/(.+?)?>/.exec(code);
+    if (htmlRefRegex !== null) {
+        // Return the first capturing group, which is the src value
+        return htmlRefRegex[1];
+    } else {
+        return null;
+    }
 }
+
 
 function readAndParseHtml(code: string, filename: string): { success: true, htmlDocument: htmlParser.HTMLElement } |
 { success: false, notfound?: boolean, htmlFile?: string } {
@@ -44,8 +46,7 @@ function getTypeFromElement(node: htmlParser.HTMLElement) {
 	return `HTML${node.tagName.substr(0, 1).toUpperCase()}${node.tagName.substr(1).toLowerCase()}Element`;
 }
 
-function getQuerySelector(line: string) {
-	const qsToken = "querySelector";
+function getQuerySelector(line: string, qsToken = "querySelector") {
 	let qsIndex = line.indexOf(qsToken);
 	if (qsIndex < 0) {
 		return null;
@@ -165,8 +166,10 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			let querySelector = getQuerySelector(activeEditor.document.lineAt(diagnostic.range.start.line).text);
 			if (null === querySelector) {
-				console.error("no query selector");
-				return;
+				querySelector = getQuerySelector(activeEditor.document.lineAt(diagnostic.range.start.line).text, "select");
+				if (null === querySelector) {
+					return;
+				}
 			}
 			let node = res.htmlDocument.querySelector(querySelector.textWithinQuotes);
 			if (!node) {
@@ -190,22 +193,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 			let line = document.lineAt(position).text;
 			const linePrefix = line.substr(0, position.character);
-			let regexes = [/querySelector\s*\(\s*["][^)"]*$/, /querySelector\s*\(\s*['][^)']*$/, /querySelector\s*\(\s*[`][^)`]*$/];
+			let regexes = [/(querySelector|select)\s*\(\s*["][^)"]*$/, /(querySelector|select)\s*\(\s*['][^)']*$/, /(querySelector|select)\s*\(\s*[`][^)`]*$/];
 			if (!regexes.some(r => linePrefix.match(r))) {
 				return undefined;
 			}
-			let qsRegex = /querySelector\s*\(\s*["'`](.*)/.exec(linePrefix);
+			let qsRegex = /(querySelector|select)\s*\(\s*["'`](.*)/.exec(linePrefix);
 			if (qsRegex === null) {
 				return undefined;
 			}
 			let res = readAndParseHtml(document.getText(), document.fileName);
 			if (!res.success) {
+				console.error("could not read and parse html", res);
 				return undefined;
 			}
 
 			let querySelector = getQuerySelector(line);
 			if (!querySelector) {
-				return undefined;
+				querySelector = getQuerySelector(line, "select");
+				if (!querySelector)
+					return undefined;
 			}
 			let { startQuoteIndex, endQuoteIndex, textWithinQuotes, quoteType } = querySelector;
 
@@ -276,6 +282,11 @@ export class GeneratePropertyForHtmlElement implements vscode.CodeActionProvider
 			.filter(diagnostic => ["2339", "2551"].find(code => String(diagnostic.code) === code) !== null);
 		if (missingPropDiagnostics.length > 0) {
 			let querySelector = getQuerySelector(document.lineAt(range.start.line).text);
+
+			if(!querySelector) {
+				querySelector = getQuerySelector(document.lineAt(range.start.line).text, "select");
+			}
+
 			if (querySelector) {
 				let selectorText = querySelector.textWithinQuotes;
 				let htmlImportFile = getHtmlImportFile(document.getText());
